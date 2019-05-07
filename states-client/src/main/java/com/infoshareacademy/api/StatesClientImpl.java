@@ -11,12 +11,12 @@ import javax.ws.rs.core.Response;
 
 public class StatesClientImpl implements StatesClient {
 
-    private static final String URL = "http://services.groupkt.com/state/get/USA/all";
+    private static final String URL = "http://services.groupkt.com/state/get/USA/";
 
     @Override
     public List<StateDetails> getAllStates() {
         Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target(URL);
+        WebTarget webTarget = client.target(URL + "all");
         Response response = webTarget.request().get();
 
         MultipleResultsResponse result = response.readEntity(MultipleResultsResponse.class);
@@ -28,9 +28,14 @@ public class StatesClientImpl implements StatesClient {
 
     @Override
     public StateDetails getState(String code) {
-        return getAllStates().stream()
-            .filter(s -> s.getAbbr().equalsIgnoreCase(code))
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new);
+        Client client = ClientBuilder.newClient();
+        WebTarget webTarget = client.target(URL + code.toUpperCase());
+        Response response = webTarget.request().get();
+
+        MultipleResultsResponse result = response.readEntity(MultipleResultsResponse.class);
+        MultipleResults multipleResults = result.getMultipleResults();
+
+        List<StateDetails> states = multipleResults.getResult();
+        return states.get(0);
     }
 }
