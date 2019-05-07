@@ -1,5 +1,6 @@
 package com.infoshareacademy.api;
 
+import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -19,14 +20,9 @@ public class GoogleTranslate {
 
         String address = "https://translation.googleapis.com/language/translate/v2";
 
-//                + "?key=" + API_KEY
-//                + "&q=" + input
-//                + "&source=" + source
-//                + "&target=" + target;
-
         Form form = new Form();
         form.param("key", API_KEY);
-        form.param("q",input);
+        form.param("q", input);
         form.param("source", source);
         form.param("target", target);
 
@@ -34,10 +30,12 @@ public class GoogleTranslate {
         WebTarget webTarget = client.target(address);
         Response response = webTarget.request().post(Entity.form(form));
 
-        String result = response.readEntity(String.class);
-
+        TranslationResult result = response.readEntity(TranslationResult.class);
         response.close(); // !!!!
 
-        return result;
+        Translations data = result.getData();
+        List<Translation> translations = data.getTranslations();
+        Translation translation = translations.get(0);
+        return translation.getTranslatedText();
     }
 }
