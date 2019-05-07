@@ -1,17 +1,20 @@
 package com.infoshareacademy.api.model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class Translation {
 
-    private String translatedText;
+    @JsonProperty("translatedText")
+    private String text;
 
     public Translation() {
     }
 
-    public String getTranslatedText() {
-        return translatedText;
+    public String getText() {
+        return text;
     }
 
-    public void setTranslatedText(String translatedText) {
-        this.translatedText = translatedText;
+    public void setText(String text) {
+        this.text = text;
     }
 }
