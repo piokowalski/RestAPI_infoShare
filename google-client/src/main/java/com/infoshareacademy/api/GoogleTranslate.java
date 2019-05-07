@@ -30,12 +30,20 @@ public class GoogleTranslate {
         WebTarget webTarget = client.target(address);
         Response response = webTarget.request().post(Entity.form(form));
 
-        TranslationResult result = response.readEntity(TranslationResult.class);
-        response.close(); // !!!!
+        if (response.getStatus() == 200) {
+            TranslationResult result = response.readEntity(TranslationResult.class);
+            response.close(); // !!!!
 
-        Translations data = result.getData();
-        List<Translation> translations = data.getTranslations();
-        Translation translation = translations.get(0);
-        return translation.getTranslatedText();
+            Translations data = result.getData();
+            List<Translation> translations = data.getTranslations();
+            Translation translation = translations.get(0);
+            return translation.getText();
+        }
+
+        ErrorResult result = response.readEntity(ErrorResult.class);
+        String message = result.getError().getMessage();
+        response.close();
+
+        throw new IllegalStateException(message);
     }
 }

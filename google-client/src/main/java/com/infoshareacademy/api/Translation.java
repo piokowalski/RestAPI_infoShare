@@ -1,22 +1,8 @@
 package com.infoshareacademy.api;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import java.util.List;
-
-public class Translation {
-
-    private String translatedText;
-
-    public Translation() {
-    }
-
-    public String getTranslatedText() {
-        return translatedText;
-    }
-
-    public void setTranslatedText(String translatedText) {
-        this.translatedText = translatedText;
-    }
-}
 
 class Translations {
 
@@ -31,6 +17,23 @@ class Translations {
 
     public void setTranslations(List<Translation> translations) {
         this.translations = translations;
+    }
+}
+
+class Translation {
+
+    @JsonProperty("translatedText")
+    private String text;
+
+    public Translation() {
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
 
