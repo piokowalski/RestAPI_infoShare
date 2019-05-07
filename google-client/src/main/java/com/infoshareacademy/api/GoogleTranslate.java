@@ -10,5 +10,6 @@ package com.infoshareacademy.api;
  
      public String translate(String input, String source, String target) {
          throw new UnsupportedOperationException("Not implemented yet");
+
      }
  }
