@@ -45,5 +45,6 @@ public class GoogleTranslate {
         response.close();
 
         throw new IllegalStateException(message);
+
     }
 }
