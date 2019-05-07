@@ -8,7 +8,7 @@ package com.infoshareacademy.api;
  
  public class GoogleTranslateTest {
  
-     public static final String API_KEY = "";
+     public static final String API_KEY = "AIzaSyDU8mB0ggBXlq3j5n_RChUAyfJh68KZTiU";
  
      private GoogleTranslate googleTranslate;
  
