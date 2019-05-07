@@ -2,6 +2,8 @@ package com.infoshareacademy.api;
 
 import com.infoshareacademy.api.model.MultipleResults;
 import com.infoshareacademy.api.model.MultipleResultsResponse;
+import com.infoshareacademy.api.model.SingleResult;
+import com.infoshareacademy.api.model.SingleResultResponse;
 import com.infoshareacademy.api.model.StateDetails;
 import java.util.List;
 import javax.ws.rs.client.Client;
@@ -32,10 +34,10 @@ public class StatesClientImpl implements StatesClient {
         WebTarget webTarget = client.target(URL + code.toUpperCase());
         Response response = webTarget.request().get();
 
-        MultipleResultsResponse result = response.readEntity(MultipleResultsResponse.class);
-        MultipleResults multipleResults = result.getMultipleResults();
+        SingleResultResponse result = response.readEntity(SingleResultResponse.class);
+        SingleResult singleResult = result.getResult();
 
-        List<StateDetails> states = multipleResults.getResult();
-        return states.get(0);
+        StateDetails stateDetails = singleResult.getResult();
+        return stateDetails;
     }
 }
