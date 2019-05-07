@@ -28,6 +28,9 @@ public class StatesClientImpl implements StatesClient {
 
     @Override
     public StateDetails getState(String code) {
-        return null;
+        return getAllStates().stream()
+            .filter(s -> s.getAbbr().equalsIgnoreCase(code))
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
     }
 }
