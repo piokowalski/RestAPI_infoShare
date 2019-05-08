@@ -5,7 +5,9 @@ import com.infoshareacademy.model.UserStore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -98,6 +100,29 @@ public class UserService {
             + "</form>";
 
         return Response.ok(form).build();
+    }
+
+    @POST
+    @Path("/authenticate")
+    public Response authenticateForm(
+        @FormParam("login") String username,
+        @FormParam("pass") String password
+    ) {
+        // LOGOWANIE HASLA TO ZLY POMYSL !!!
+        LOG.info("Sent form with the details: username {}, password {}", username, password);
+
+        boolean userExists = userStore.getBase().values().stream()
+            .map(User::getCredentials)
+            .anyMatch(c -> c.getUser().equals(username)
+                && c.getPassword().equals(password));
+
+        if (userExists) {
+            LOG.info("User found!");
+            return Response.ok().build();
+        }
+
+        LOG.warn("User not found :-C");
+        return Response.status(Status.UNAUTHORIZED).build();
     }
 
 }
