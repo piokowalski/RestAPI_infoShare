@@ -10,6 +10,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -152,6 +153,23 @@ public class UserService {
         ));
 
         return getUsers();
+    }
+
+    @PUT
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUser(User user) {
+
+        LOG.info("Updating user with id {}", user.getId());
+
+        if (userStore.getBase().containsKey(user.getId())) {
+            userStore.getBase().put(user.getId(), user);
+            return getUser(user.getId());
+        }
+
+        LOG.warn("User not found :-C");
+        return Response.status(Status.NOT_FOUND).build();
     }
 
 }
