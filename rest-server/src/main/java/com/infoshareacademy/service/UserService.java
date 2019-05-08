@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -169,6 +170,23 @@ public class UserService {
         }
 
         LOG.warn("User not found :-C");
+        return Response.status(Status.NOT_FOUND).build();
+    }
+
+    @DELETE
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@QueryParam("id") Integer id) {
+        LOG.info("Removing user with id {}", id);
+
+        if (userStore.getBase().containsKey(id)) {
+            userStore.getBase().remove(id);
+
+            LOG.info("User successfully removed");
+            return getUsers();
+        }
+
+        LOG.warn("User not found");
         return Response.status(Status.NOT_FOUND).build();
     }
 
