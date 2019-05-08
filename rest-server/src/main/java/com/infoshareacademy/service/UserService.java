@@ -12,7 +12,8 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public class UserService {
 
-    private Logger LOG = LoggerFactory.getLogger(UserService.class);
+    private Logger LOG =
+            LoggerFactory.getLogger(UserService.class);
 
     public UserService() {
     }

@@ -21,10 +21,10 @@ public class UserStore {
         base = new HashMap<Integer, User>();
 
         User user1 = new User("Adam", "Iksinski", 1,
-            new Credentials("adam", "haslo123"));
+                new Credentials("adam", "haslo123"));
 
         User user2 = new User("Karol", "Ygrekowski", 2,
-            new Credentials("karoly", "123456"));
+                new Credentials("karoly", "123456"));
 
         base.put(user1.getId(), user1);
         base.put(user2.getId(), user2);
