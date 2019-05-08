@@ -1,5 +1,6 @@
 package com.infoshareacademy.service;
 
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -35,6 +36,15 @@ public class UserService {
         LOG.info("Path parameters: {}", uriInfo.getPathParameters());
 
         return Response.ok("Hello my dear " + name).build();
+    }
+
+    @GET
+    @Path("/browser")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response checkBrowser(@HeaderParam("user-agent") String details) {
+
+        LOG.info("Your browser is {}", details);
+        return Response.ok("Your browser is " + details).build();
     }
 
 }
