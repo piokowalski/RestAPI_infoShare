@@ -1,10 +1,12 @@
 package com.infoshareacademy.service;
 
+import com.infoshareacademy.model.Credentials;
 import com.infoshareacademy.model.User;
 import com.infoshareacademy.model.UserStore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -123,6 +125,15 @@ public class UserService {
 
         LOG.warn("User not found :-C");
         return Response.status(Status.UNAUTHORIZED).build();
+    }
+
+    @POST
+    @Path("/authenticate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response authenticate(Credentials credentials) {
+        String username = credentials.getUser();
+        String password = credentials.getPassword();
+        return authenticateForm(username, password);
     }
 
 }
