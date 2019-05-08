@@ -7,7 +7,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +68,23 @@ public class UserService {
         }
 
         return Response.ok(users).build();
+    }
+
+    @GET
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@QueryParam("id") Integer id) {
+
+        LOG.info("Querying user id {}", id);
+
+        User user = userStore.getBase().get(id);
+        if (user == null) {
+            LOG.warn("No user found");
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
+        LOG.info("User found: {}", user);
+        return Response.ok(user).build();
     }
 
 }
