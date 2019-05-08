@@ -7,7 +7,6 @@ public class Credentials {
 
     private String user;
 
-
     private String password;
 
     public Credentials() {

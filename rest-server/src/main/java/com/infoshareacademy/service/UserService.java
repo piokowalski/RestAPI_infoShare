@@ -3,18 +3,25 @@ package com.infoshareacademy.service;
 import com.infoshareacademy.model.Credentials;
 import com.infoshareacademy.model.User;
 import com.infoshareacademy.model.UserStore;
-
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -104,7 +111,7 @@ public class UserService {
         @FormParam("login") String username,
         @FormParam("pass") String password
     ) {
-        // logging passwords is really bad
+        // LOGOWANIE HASLA TO ZLY POMYSL !!!
         LOG.info("Sent form with the details: username {}, password {}", username, password);
 
         boolean userExists = userStore.getBase().values().stream()
@@ -129,4 +136,40 @@ public class UserService {
         String password = credentials.getPassword();
         return authenticateForm(username, password);
     }
+
+    @POST
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addUser(User user) {
+
+        int newId = userStore.getNextId();
+
+        userStore.add(new User(
+            user.getName(),
+            user.getSurname(),
+            newId,
+            user.getCredentials()
+        ));
+
+        return getUsers();
+    }
+
+    @PUT
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUser(User user) {
+
+        LOG.info("Updating user with id {}", user.getId());
+
+        if (userStore.getBase().containsKey(user.getId())) {
+            userStore.getBase().put(user.getId(), user);
+            return getUser(user.getId());
+        }
+
+        LOG.warn("User not found :-C");
+        return Response.status(Status.NOT_FOUND).build();
+    }
+
 }
