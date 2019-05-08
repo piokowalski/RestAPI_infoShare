@@ -3,9 +3,12 @@ package com.infoshareacademy.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.Map;
 
+@ApplicationScoped
 public class UserStore {
 
     private Logger LOG = LoggerFactory.getLogger(UserStore.class);
