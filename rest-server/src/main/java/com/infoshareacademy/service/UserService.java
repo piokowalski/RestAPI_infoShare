@@ -1,5 +1,10 @@
 package com.infoshareacademy.service;
 
+import com.infoshareacademy.model.User;
+import com.infoshareacademy.model.UserStore;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -20,6 +25,9 @@ public class UserService {
 
     @Context
     private UriInfo uriInfo;
+
+    @Inject
+    private UserStore userStore;
 
     public UserService() {
     }
@@ -45,6 +53,19 @@ public class UserService {
 
         LOG.info("Your browser is {}", details);
         return Response.ok("Your browser is " + details).build();
+    }
+
+    @GET
+    @Path("/users")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUsers() {
+        List<User> users = new ArrayList<>(userStore.getBase().values());
+
+        if (users.isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        return Response.ok(users).build();
     }
 
 }

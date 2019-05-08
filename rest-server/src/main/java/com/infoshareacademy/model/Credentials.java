@@ -1,9 +1,12 @@
 package com.infoshareacademy.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Credentials {
 
     private String user;
 
+    @JsonIgnore
     private String password;
 
     public Credentials() {
