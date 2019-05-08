@@ -1,5 +1,6 @@
 package com.infoshareacademy.service;
 
+import javax.ws.rs.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +21,10 @@ public class UserService {
     @GET
     @Path("/hello/{name}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response sayHello() {
-        LOG.info("Saying hello!");
+    public Response sayHello(@PathParam("name") String name) {
+        LOG.info("Saying hello to {}!", name);
 
-        return Response.ok().build();
+        return Response.ok("Hello my dear " + name).build();
     }
 
 }
