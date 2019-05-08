@@ -82,5 +82,4 @@ public class UserService {
         LOG.info("User found: {}", user);
         return Response.ok(user).build();
     }
-
 }
