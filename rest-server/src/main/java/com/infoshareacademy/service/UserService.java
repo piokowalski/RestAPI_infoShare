@@ -58,7 +58,6 @@ public class UserService {
     @Path("/users")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
-
         List<User> users = new ArrayList<>(userStore.getBase().values());
 
         if (users.isEmpty()) {
@@ -67,4 +66,21 @@ public class UserService {
 
         return Response.ok(users).build();
     }
+
+    @GET
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@QueryParam("id") Integer id) {
+
+        LOG.info("Querying user id {}", id);
+
+        User user = userStore.getBase().get(id);
+        if (user == null) {
+            LOG.warn("No user found");
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        LOG.info("User found: {}", user);
+        return Response.ok(user).build();
+    }
+
 }
