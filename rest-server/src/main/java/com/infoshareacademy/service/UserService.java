@@ -37,4 +37,13 @@ public class UserService {
 
         return Response.ok("Hello, dear "+name+"!").build();
     }
+
+    @GET
+    @Path("/browser")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response showWebBrowser(@HeaderParam("user-agent") String details){
+        LOG.info("Your browser is {}", details);
+        return Response.ok("You're currently using " + details).build();
+
+    }
 }
