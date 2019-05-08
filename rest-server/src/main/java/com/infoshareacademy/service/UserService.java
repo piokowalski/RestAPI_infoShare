@@ -2,23 +2,30 @@ package com.infoshareacademy.service;
 
 import com.infoshareacademy.model.User;
 import com.infoshareacademy.model.UserStore;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.util.List;
-import java.util.ArrayList;
 
 @Path("/")
 public class UserService {
 
-    private static final Logger LOG =
-            LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     @Context
     private UriInfo uriInfo;
@@ -32,7 +39,6 @@ public class UserService {
     @GET
     @Path("/hello/{name}")
     @Produces(MediaType.TEXT_PLAIN)
-    @HeaderParam("hello{name}")
     public Response sayHello(@PathParam("name") String name) {
         LOG.info("Saying hello to {}!", name);
 
@@ -41,17 +47,16 @@ public class UserService {
         LOG.info("Query parameters: {}", uriInfo.getQueryParameters());
         LOG.info("Path parameters: {}", uriInfo.getPathParameters());
 
-        return Response.ok("Hello, dear "+name+"!").build();
+        return Response.ok("Hello my dear " + name).build();
     }
 
     @GET
     @Path("/browser")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response showWebBrowser(@HeaderParam("user-agent") String details){
+    public Response checkBrowser(@HeaderParam("user-agent") String details) {
 
         LOG.info("Your browser is {}", details);
-
-        return Response.ok("You're currently using " + details).build();
+        return Response.ok("Your browser is " + details).build();
     }
 
     @GET
@@ -77,9 +82,47 @@ public class UserService {
         User user = userStore.getBase().get(id);
         if (user == null) {
             LOG.warn("No user found");
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Status.NOT_FOUND).build();
         }
+
         LOG.info("User found: {}", user);
         return Response.ok(user).build();
     }
+
+    @GET
+    @Path("/login")
+    @Produces(MediaType.TEXT_HTML)
+    public Response showLoginForm() {
+        String form = "<form action=\"authenticate\" method=\"post\">\n"
+            + "  Login: <input type=\"text\" name=\"login\"/><br/>\n"
+            + "  Password: <input type=\"password\" name=\"pass\"/><br/>\n"
+            + "  <input type=\"Submit\" value=\"GO\"/>\n"
+            + "</form>";
+
+        return Response.ok(form).build();
+    }
+
+    @POST
+    @Path("/authenticate")
+    public Response authenticateForm(
+        @FormParam("login") String username,
+        @FormParam("pass") String password
+    ) {
+        // LOGOWANIE HASLA TO ZLY POMYSL !!!
+        LOG.info("Sent form with the details: username {}, password {}", username, password);
+
+        boolean userExists = userStore.getBase().values().stream()
+            .map(User::getCredentials)
+            .anyMatch(c -> c.getUser().equals(username)
+                && c.getPassword().equals(password));
+
+        if (userExists) {
+            LOG.info("User found!");
+            return Response.ok().build();
+        }
+
+        LOG.warn("User not found :-C");
+        return Response.status(Status.UNAUTHORIZED).build();
+    }
+
 }

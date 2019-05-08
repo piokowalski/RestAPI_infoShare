@@ -1,6 +1,7 @@
 package com.infoshareacademy.api.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StateDetails {
@@ -9,6 +10,7 @@ public class StateDetails {
 
     private String name;
 
+    @JsonProperty("largest_city")
     private String largestCity;
 
     private String capital;
