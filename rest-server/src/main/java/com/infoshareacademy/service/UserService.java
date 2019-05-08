@@ -1,24 +1,20 @@
 package com.infoshareacademy.service;
 
+import com.infoshareacademy.model.Credentials;
 import com.infoshareacademy.model.User;
 import com.infoshareacademy.model.UserStore;
+
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -108,7 +104,7 @@ public class UserService {
         @FormParam("login") String username,
         @FormParam("pass") String password
     ) {
-        // LOGOWANIE HASLA TO ZLY POMYSL !!!
+        // logging passwords is really bad
         LOG.info("Sent form with the details: username {}, password {}", username, password);
 
         boolean userExists = userStore.getBase().values().stream()
@@ -125,4 +121,12 @@ public class UserService {
         return Response.status(Status.UNAUTHORIZED).build();
     }
 
+    @POST
+    @Path("/authenticate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response authenticate(Credentials credentials) {
+        String username = credentials.getUser();
+        String password = credentials.getPassword();
+        return authenticateForm(username, password);
+    }
 }

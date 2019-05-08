@@ -1,12 +1,13 @@
 package com.infoshareacademy.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Credentials {
 
     private String user;
 
-    @JsonIgnore
+
     private String password;
 
     public Credentials() {
@@ -22,10 +23,12 @@ public class Credentials {
         return user;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
