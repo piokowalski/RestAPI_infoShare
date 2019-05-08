@@ -189,5 +189,4 @@ public class UserService {
         LOG.warn("User not found");
         return Response.status(Status.NOT_FOUND).build();
     }
-
 }
