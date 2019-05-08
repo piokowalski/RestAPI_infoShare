@@ -87,4 +87,17 @@ public class UserService {
         return Response.ok(user).build();
     }
 
+    @GET
+    @Path("/login")
+    @Produces(MediaType.TEXT_HTML)
+    public Response showLoginForm() {
+        String form = "<form action=\"authenticate\" method=\"post\">\n"
+            + "  Login: <input type=\"text\" name=\"login\"/><br/>\n"
+            + "  Password: <input type=\"password\" name=\"pass\"/><br/>\n"
+            + "  <input type=\"Submit\" value=\"GO\"/>\n"
+            + "</form>";
+
+        return Response.ok(form).build();
+    }
+
 }
