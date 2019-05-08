@@ -136,4 +136,22 @@ public class UserService {
         return authenticateForm(username, password);
     }
 
+    @POST
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addUser(User user) {
+
+        int newId = userStore.getNextId();
+
+        userStore.add(new User(
+            user.getName(),
+            user.getSurname(),
+            newId,
+            user.getCredentials()
+        ));
+
+        return getUsers();
+    }
+
 }

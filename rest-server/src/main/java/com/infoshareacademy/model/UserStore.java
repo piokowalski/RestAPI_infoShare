@@ -32,6 +32,13 @@ public class UserStore {
         base.put(user2.getId(), user2);
     }
 
+    public int getNextId() {
+        return base.keySet().stream()
+            .mapToInt(i -> i)
+            .max()
+            .orElse(0) + 1;
+    }
+
     public void add(User user) {
         LOG.info("Adding to store: " + user.toString());
         base.put(user.getId(), user);
